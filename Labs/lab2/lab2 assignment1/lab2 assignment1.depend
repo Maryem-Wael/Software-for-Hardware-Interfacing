@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1636742903 source:d:\smbe\lab2 assignment1\main.c
+	<stdio.h>
+	<stdlib.h>
+
