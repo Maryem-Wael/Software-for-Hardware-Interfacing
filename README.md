@@ -42,19 +42,19 @@ LED toggle based on an external interrupt triggered by a button press
 Transmit a string (Hello World!) over UART
 
 
-# Lab 1
+# Task 1
 
 Calculate the exponential function using Taylor series.
 
-# Lab 2
+# Task 2
 
 A software that scans the button periodically. At each valid button press, the Software shall change the RGB LED color.
 
-# Lab 3
+# Task 3
 
 Add a GPIO_ReadPin function to the GPIO driver. Use the complete driver to perform the same actions of HW Task 2.
 
-# Lab 4
+# Task 4
 
 A software to perform a decimal counter on a 7-segment display based on an extrenal interrupts triggered by 2 buttons.
 
