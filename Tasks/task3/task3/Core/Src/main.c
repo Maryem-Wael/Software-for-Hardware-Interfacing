@@ -8,7 +8,9 @@ void delay(int sec){
 int main(void) {
 	unsigned int color=0 ;
 	unsigned int button=0 ;
+	//button
 	GPIO_Init('B', 3 , INPUT, PUSH_PULL);
+	//RGB
 	GPIO_Init('B', 5 , OUTPUT, PUSH_PULL);
 	GPIO_Init('B', 6 , OUTPUT, PUSH_PULL);
 	GPIO_Init('B', 7 , OUTPUT, PUSH_PULL);
@@ -20,9 +22,10 @@ int main(void) {
 	  button=GPIO_ReadPin('B' , 3 );
 	  if(button == 0){
 		  color++;
-		  GPIO_WritePin('B', 5, color&1);
-		  GPIO_WritePin('B', 6, (color>>1)&1);
-		  GPIO_WritePin('B', 7, (color>>2)&1);
+		  //next color of RGB
+		  GPIO_WritePin('B',5,((1<<5)&(color<<5)));
+		  GPIO_WritePin('B',6,((1<<6)&(color<<5)));
+		  GPIO_WritePin('B',7,((1<<7)&(color<<5)));
 	  }
 	 while(button == 0){
 		  button=GPIO_ReadPin('B' ,3 );

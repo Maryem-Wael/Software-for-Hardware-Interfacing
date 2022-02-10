@@ -449,13 +449,13 @@ LOAD c:/st/stm32cubeide_1.7.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_line    0x00000000000004a0      0x4f2 ./Core/Src/system_stm32f4xx.o
  .debug_line    0x0000000000000992       0x88 ./Core/Startup/startup_stm32f401ccux.o
 
-.debug_str      0x0000000000000000    0x4fadc
- .debug_str     0x0000000000000000    0x4f28f ./Core/Src/main.o
-                                      0x4f408 (size before relaxing)
- .debug_str     0x000000000004f28f      0x817 ./Core/Src/system_stm32f4xx.o
-                                      0x4f6aa (size before relaxing)
- .debug_str     0x000000000004faa6       0x36 ./Core/Startup/startup_stm32f401ccux.o
-                                         0x53 (size before relaxing)
+.debug_str      0x0000000000000000    0x4fadb
+ .debug_str     0x0000000000000000    0x4f28e ./Core/Src/main.o
+                                      0x4f407 (size before relaxing)
+ .debug_str     0x000000000004f28e      0x817 ./Core/Src/system_stm32f4xx.o
+                                      0x4f6a9 (size before relaxing)
+ .debug_str     0x000000000004faa5       0x36 ./Core/Startup/startup_stm32f401ccux.o
+                                         0x52 (size before relaxing)
 
 .comment        0x0000000000000000       0x53
  .comment       0x0000000000000000       0x53 ./Core/Src/main.o

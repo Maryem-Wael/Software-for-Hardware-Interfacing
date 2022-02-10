@@ -1,27 +1,11 @@
-/*
- * Author : Abdullah Drwesh
- * Date   : 8/12/2021
- * Version: 1.0.0
- */
+
 #include "GPIO.h"
 #include "Keypad.h"
 #include "stm32f401cc_interface.h"
 
-unsigned char KeyPadButton = Released;
-unsigned char Key_Pressed = 0;
-unsigned char KeyPad_array[3][4] = {{1,
-		                            4,
-									7,
-									'*'},
-		                           {2,
-		                            5,
-									8,
-									0},
-
-									{3,
-									 6,
-									 9,
-									 '#'}};
+unsigned char KeyPad_Array[3][4] = {{1,4,7,'*'},{2,5,8,0},{3, 6,9,'#'}};
+unsigned char KeyPad_State = Released;
+unsigned char Key_Value = 0;
 
 void KeyPad_Init()
 {
@@ -39,40 +23,37 @@ void KeyPad_Init()
 
 unsigned char KeyPad_GetKey()
 {
-	if(KeyPadButton == Pressed)
-	{
-		KeyPadButton = Released;
-	    return Key_Pressed;
-	}
-	else
-	{
-		return 0;
-	}
+	KeyPad_State = Released;
+	return Key_Value;
+
 }
 
 void KeyPad_Manage()
 {
-	if(KeyPadButton == Pressed)
-	{
-		KeyPad_CallOut_Button_Pressed_Notification();
-	}
 
-	if(KeyPadButton == Released)
+	if(KeyPad_State == Released)
 	{
 		for(int i=0; i < 3; i++)
 		{
 			GPIO_WritePin(1, i, 0);
-			for(int j=0; j < 4; j++)
+			for(int j=3; j < 7; j++)
 			{
-				if (GPIO_ReadPin(1, (j+3)) == 0 && !(i == 0 && j == 3) && !(i == 2 && j == 3) && KeyPadButton == Released)
-				{
-					Key_Pressed = KeyPad_array[i][j];
-					KeyPadButton = Pressed;
-					KeyPad_CallOut_Button_Pressed_Notification();
+				if (GPIO_ReadPin(1, j) == 0)
+				{delay(10000);
+					if (GPIO_ReadPin(1, j) == 0){
+						Key_Value = KeyPad_Array[i][j-3];
+					    KeyPad_State = Pressed;
+					    KeyPad_CallOut_Button_Pressed_Notification();}
 				}
 			 }
 			GPIO_WritePin(1, i, 1);
 		 }
 	 }
 
+}
+void delay(int milli_secs)
+{
+    for (unsigned int i = 0; i < milli_secs; i++)
+    {
+    }
 }

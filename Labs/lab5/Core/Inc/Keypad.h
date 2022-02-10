@@ -1,8 +1,4 @@
-/*
- * Author : Abdullah Drwesh
- * Date   : 8/12/2021
- * Version: 1.0.0
- */
+
 
 #ifndef KEYPAD_H
 #define KEYPAD_H
@@ -15,6 +11,10 @@
 void KeyPad_Init();
 void KeyPad_Manage();
 unsigned char KeyPad_GetKey();
+void delay(int secs);
+void KeyPad_CallOut_Button_Pressed_Notification();
+void Display_Key(unsigned char key);
+
 
 
 #endif /* KEYPAD_H */

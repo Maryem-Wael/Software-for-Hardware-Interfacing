@@ -1,8 +1,4 @@
-/*
- * Author : Abdullah Drwesh
- * Date   : 7/12/2021
- * Version: 1.0.0
- */
+
 #ifndef GPIO_H
 #define GPIO_H
 

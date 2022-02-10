@@ -1,5 +1,5 @@
 
-Lab 4.elf:     file format elf32-littlearm
+task3.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00010698  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00000bf4  00000000  00000000  000106c8  2**0
+ 12 .debug_info   00000bdc  00000000  00000000  000106c8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00000365  00000000  00000000  000112bc  2**0
+ 13 .debug_abbrev 0000034d  00000000  00000000  000112a4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000000a8  00000000  00000000  00011628  2**3
+ 14 .debug_aranges 000000a8  00000000  00000000  000115f8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000070  00000000  00000000  000116d0  2**3
+ 15 .debug_ranges 00000070  00000000  00000000  000116a0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0000de7f  00000000  00000000  00011740  2**0
+ 16 .debug_macro  0000de7f  00000000  00000000  00011710  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00001060  00000000  00000000  0001f5bf  2**0
+ 17 .debug_line   00001063  00000000  00000000  0001f58f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0004fc7f  00000000  00000000  0002061f  2**0
+ 18 .debug_str    0004fc61  00000000  00000000  000205f2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  0007029e  2**0
+ 19 .comment      00000053  00000000  00000000  00070253  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000164  00000000  00000000  000702f4  2**2
+ 20 .debug_frame  00000164  00000000  00000000  000702a8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -116,12 +116,14 @@ int main(void) {
 	unsigned int button=0 ;
  8000208:	2300      	movs	r3, #0
  800020a:	603b      	str	r3, [r7, #0]
+	//button
 	GPIO_Init('B', 3 , INPUT, PUSH_PULL);
  800020c:	2300      	movs	r3, #0
  800020e:	2200      	movs	r2, #0
  8000210:	2103      	movs	r1, #3
  8000212:	2042      	movs	r0, #66	; 0x42
  8000214:	f000 f88a 	bl	800032c <GPIO_Init>
+	//RGB
 	GPIO_Init('B', 5 , OUTPUT, PUSH_PULL);
  8000218:	2300      	movs	r3, #0
  800021a:	2201      	movs	r2, #1
@@ -161,59 +163,75 @@ int main(void) {
 	  if(button == 0){
  800025c:	683b      	ldr	r3, [r7, #0]
  800025e:	2b00      	cmp	r3, #0
- 8000260:	d123      	bne.n	80002aa <main+0xac>
+ 8000260:	d124      	bne.n	80002ac <main+0xae>
 		  color++;
  8000262:	687b      	ldr	r3, [r7, #4]
  8000264:	3301      	adds	r3, #1
  8000266:	607b      	str	r3, [r7, #4]
-		  GPIO_WritePin('B', 5, color&1);
+		  //next color of RGB
+		  GPIO_WritePin('B',5,((1<<5)&(color<<5)));
  8000268:	687b      	ldr	r3, [r7, #4]
- 800026a:	f003 0301 	and.w	r3, r3, #1
- 800026e:	461a      	mov	r2, r3
- 8000270:	2105      	movs	r1, #5
- 8000272:	2042      	movs	r0, #66	; 0x42
- 8000274:	f000 f93c 	bl	80004f0 <GPIO_WritePin>
-		  GPIO_WritePin('B', 6, (color>>1)&1);
- 8000278:	687b      	ldr	r3, [r7, #4]
- 800027a:	085b      	lsrs	r3, r3, #1
- 800027c:	f003 0301 	and.w	r3, r3, #1
- 8000280:	461a      	mov	r2, r3
- 8000282:	2106      	movs	r1, #6
- 8000284:	2042      	movs	r0, #66	; 0x42
- 8000286:	f000 f933 	bl	80004f0 <GPIO_WritePin>
-		  GPIO_WritePin('B', 7, (color>>2)&1);
- 800028a:	687b      	ldr	r3, [r7, #4]
- 800028c:	089b      	lsrs	r3, r3, #2
- 800028e:	f003 0301 	and.w	r3, r3, #1
- 8000292:	461a      	mov	r2, r3
- 8000294:	2107      	movs	r1, #7
- 8000296:	2042      	movs	r0, #66	; 0x42
- 8000298:	f000 f92a 	bl	80004f0 <GPIO_WritePin>
+ 800026a:	015b      	lsls	r3, r3, #5
+ 800026c:	f003 0320 	and.w	r3, r3, #32
+ 8000270:	461a      	mov	r2, r3
+ 8000272:	2105      	movs	r1, #5
+ 8000274:	2042      	movs	r0, #66	; 0x42
+ 8000276:	f000 f93b 	bl	80004f0 <GPIO_WritePin>
+		  GPIO_WritePin('B',6,((1<<6)&(color<<5)));
+ 800027a:	687b      	ldr	r3, [r7, #4]
+ 800027c:	015b      	lsls	r3, r3, #5
+ 800027e:	f003 0340 	and.w	r3, r3, #64	; 0x40
+ 8000282:	461a      	mov	r2, r3
+ 8000284:	2106      	movs	r1, #6
+ 8000286:	2042      	movs	r0, #66	; 0x42
+ 8000288:	f000 f932 	bl	80004f0 <GPIO_WritePin>
+		  GPIO_WritePin('B',7,((1<<7)&(color<<5)));
+ 800028c:	687b      	ldr	r3, [r7, #4]
+ 800028e:	015b      	lsls	r3, r3, #5
+ 8000290:	f003 0380 	and.w	r3, r3, #128	; 0x80
+ 8000294:	461a      	mov	r2, r3
+ 8000296:	2107      	movs	r1, #7
+ 8000298:	2042      	movs	r0, #66	; 0x42
+ 800029a:	f000 f929 	bl	80004f0 <GPIO_WritePin>
 	  }
 	 while(button == 0){
- 800029c:	e005      	b.n	80002aa <main+0xac>
+ 800029e:	e005      	b.n	80002ac <main+0xae>
 		  button=GPIO_ReadPin('B' ,3 );
- 800029e:	2103      	movs	r1, #3
- 80002a0:	2042      	movs	r0, #66	; 0x42
- 80002a2:	f000 f997 	bl	80005d4 <GPIO_ReadPin>
- 80002a6:	4603      	mov	r3, r0
- 80002a8:	603b      	str	r3, [r7, #0]
+ 80002a0:	2103      	movs	r1, #3
+ 80002a2:	2042      	movs	r0, #66	; 0x42
+ 80002a4:	f000 f996 	bl	80005d4 <GPIO_ReadPin>
+ 80002a8:	4603      	mov	r3, r0
+ 80002aa:	603b      	str	r3, [r7, #0]
 	 while(button == 0){
- 80002aa:	683b      	ldr	r3, [r7, #0]
- 80002ac:	2b00      	cmp	r3, #0
- 80002ae:	d0f6      	beq.n	800029e <main+0xa0>
-  while (1) {
- 80002b0:	e7c4      	b.n	800023c <main+0x3e>
-	...
+ 80002ac:	683b      	ldr	r3, [r7, #0]
+ 80002ae:	2b00      	cmp	r3, #0
+ 80002b0:	d0f6      	beq.n	80002a0 <main+0xa2>
+	  button = GPIO_ReadPin('B' , 3 );
+ 80002b2:	e7c3      	b.n	800023c <main+0x3e>
 
 080002b4 <SystemInit>:
+  *         configuration.
+  * @param  None
+  * @retval None
+  */
+void SystemInit(void)
+{
  80002b4:	b480      	push	{r7}
  80002b6:	af00      	add	r7, sp, #0
+  /* FPU settings ------------------------------------------------------------*/
+  #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+    SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
  80002b8:	4b06      	ldr	r3, [pc, #24]	; (80002d4 <SystemInit+0x20>)
  80002ba:	f8d3 3088 	ldr.w	r3, [r3, #136]	; 0x88
  80002be:	4a05      	ldr	r2, [pc, #20]	; (80002d4 <SystemInit+0x20>)
  80002c0:	f443 0370 	orr.w	r3, r3, #15728640	; 0xf00000
  80002c4:	f8c2 3088 	str.w	r3, [r2, #136]	; 0x88
+
+  /* Configure the Vector Table location -------------------------------------*/
+#if defined(USER_VECT_TAB_ADDRESS)
+  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+#endif /* USER_VECT_TAB_ADDRESS */
+}
  80002c8:	bf00      	nop
  80002ca:	46bd      	mov	sp, r7
  80002cc:	f85d 7b04 	ldr.w	r7, [sp], #4
@@ -222,46 +240,103 @@ int main(void) {
  80002d4:	e000ed00 	.word	0xe000ed00
 
 080002d8 <Reset_Handler>:
+
+    .section  .text.Reset_Handler
+  .weak  Reset_Handler
+  .type  Reset_Handler, %function
+Reset_Handler:  
+  ldr   sp, =_estack      /* set stack pointer */
  80002d8:	f8df d034 	ldr.w	sp, [pc, #52]	; 8000310 <LoopFillZerobss+0x12>
+
+/* Copy the data segment initializers from flash to SRAM */  
+  ldr r0, =_sdata
  80002dc:	480d      	ldr	r0, [pc, #52]	; (8000314 <LoopFillZerobss+0x16>)
+  ldr r1, =_edata
  80002de:	490e      	ldr	r1, [pc, #56]	; (8000318 <LoopFillZerobss+0x1a>)
+  ldr r2, =_sidata
  80002e0:	4a0e      	ldr	r2, [pc, #56]	; (800031c <LoopFillZerobss+0x1e>)
+  movs r3, #0
  80002e2:	2300      	movs	r3, #0
+  b LoopCopyDataInit
  80002e4:	e002      	b.n	80002ec <LoopCopyDataInit>
 
 080002e6 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
  80002e6:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
  80002e8:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
  80002ea:	3304      	adds	r3, #4
 
 080002ec <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
  80002ec:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
  80002ee:	428c      	cmp	r4, r1
+  bcc CopyDataInit
  80002f0:	d3f9      	bcc.n	80002e6 <CopyDataInit>
+  
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
  80002f2:	4a0b      	ldr	r2, [pc, #44]	; (8000320 <LoopFillZerobss+0x22>)
+  ldr r4, =_ebss
  80002f4:	4c0b      	ldr	r4, [pc, #44]	; (8000324 <LoopFillZerobss+0x26>)
+  movs r3, #0
  80002f6:	2300      	movs	r3, #0
+  b LoopFillZerobss
  80002f8:	e001      	b.n	80002fe <LoopFillZerobss>
 
 080002fa <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
  80002fa:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
  80002fc:	3204      	adds	r2, #4
 
 080002fe <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
  80002fe:	42a2      	cmp	r2, r4
+  bcc FillZerobss
  8000300:	d3fb      	bcc.n	80002fa <FillZerobss>
+
+/* Call the clock system intitialization function.*/
+  bl  SystemInit   
  8000302:	f7ff ffd7 	bl	80002b4 <SystemInit>
+/* Call static constructors */
+    bl __libc_init_array
  8000306:	f000 f993 	bl	8000630 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl  main
  800030a:	f7ff ff78 	bl	80001fe <main>
+  bx  lr    
  800030e:	4770      	bx	lr
+  ldr   sp, =_estack      /* set stack pointer */
  8000310:	20010000 	.word	0x20010000
+  ldr r0, =_sdata
  8000314:	20000000 	.word	0x20000000
+  ldr r1, =_edata
  8000318:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
  800031c:	08000698 	.word	0x08000698
+  ldr r2, =_sbss
  8000320:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
  8000324:	2000001c 	.word	0x2000001c
 
 08000328 <ADC_IRQHandler>:
+ * @retval None       
+*/
+    .section  .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b  Infinite_Loop
  8000328:	e7fe      	b.n	8000328 <ADC_IRQHandler>
 	...
 
